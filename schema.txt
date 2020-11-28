@@ -1,0 +1,37 @@
+Team : Coach -> 1 : 1
+Player : Team -> many : 1
+Tournament : Team -> many : many
+
+
+TeamInTournament
+
+
+Team {
+	string id;
+	string nume;
+	string coachId;
+	string points;
+	string victories;
+	string defeats;
+	string draws;
+	string tournamentsWins;
+}
+
+Coach {	
+	string id;
+	string nume;
+	string experienta;
+}
+
+Tournament {
+	string id;
+	string nume;
+}
+
+TeamInTournament {
+	string id;
+	string teamId;
+	string tournamentId;
+}
+
+
