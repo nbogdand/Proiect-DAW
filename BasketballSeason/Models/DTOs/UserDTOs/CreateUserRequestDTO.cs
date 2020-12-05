@@ -13,6 +13,7 @@ namespace BasketballSeason.Models.DTOs.UserDTOs
         [Required]
         public string Email { get; set; }
         [Required]
+        [StringLength(16, MinimumLength = 4, ErrorMessage = "Password's lenght must be between 4 and 16 characters")]
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

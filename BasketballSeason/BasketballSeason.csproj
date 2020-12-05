@@ -7,12 +7,12 @@
   <ItemGroup>
     <Folder Include="Models\Base\" />
     <Folder Include="Data\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Repositories\GenericRepo\" />
     <Folder Include="Services\UserS\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">

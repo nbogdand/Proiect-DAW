@@ -92,7 +92,15 @@ namespace BasketballSeason.Services.UserS
 
         public User GetById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _userRepository.FindById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex.Message}\r\n{ex.StackTrace}");
+                return null;
+            }
         }
     }
 }

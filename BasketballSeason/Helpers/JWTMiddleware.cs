@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BasketballSeason.Services.UserS;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,11 +15,13 @@ namespace BasketballSeason.Helpers
     {
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
-        public JWTMiddleware(IOptions<AppSettings> appSettings, RequestDelegate next)
+        public JWTMiddleware(IOptions<AppSettings> appSettings, RequestDelegate next, ILogger<JWTMiddleware> logger)
         {
             _appSettings = appSettings.Value;
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext httpContext, IUserService userService)
@@ -54,9 +57,9 @@ namespace BasketballSeason.Helpers
                 // attach user to the httpContext
                 httpContext.Items["User"] = userService.GetById(userId);
             }
-            catch
+            catch (Exception ex)
             {
-
+                _logger.LogWarning($"{ex.Message}\r\n{ex.StackTrace}");
             }
         }
     }

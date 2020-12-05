@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BasketballSeason.Controllers
 {
-    [Route("api/Users")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace BasketballSeason.Controllers
             _userService = userService;
         }
 
-        [HttpPost("authentificate")]
+        [HttpPost("login")]
         public IActionResult Authentificate([FromBody] UserRequestDTO user)
         {
             var result = _userService.Authentificate(user);
@@ -30,7 +30,7 @@ namespace BasketballSeason.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] CreateUserRequestDTO userRequest)
         {
             var Result = _userService.Register(userRequest);
