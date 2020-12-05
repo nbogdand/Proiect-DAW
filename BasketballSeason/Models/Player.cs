@@ -8,6 +8,8 @@ namespace BasketballSeason.Models
     {
         public string Name { get; set; }
 
+        public DateTime Birthdate { get; set; }
+
         public int MatchesPlayed { get; set; }
 
         public string Role { get; set; }
