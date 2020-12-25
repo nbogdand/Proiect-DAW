@@ -9,7 +9,7 @@ namespace BasketballSeason.Services
     public interface ITeamService
     {
         public List<Team> GetTeams();
-        public Team GetTeam(Guid Id);
+        public Task<Team> GetTeam(Guid Id);
         public Team CreateTeam(Team Team);
         public Team UpdateTeam(Guid Id, Team Team);
         public bool DeleteTeam(Guid Id);

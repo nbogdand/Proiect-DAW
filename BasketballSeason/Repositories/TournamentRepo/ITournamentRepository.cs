@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using BasketballSeason.Models;
 using BasketballSeason.Repositories.GenericRepo;
 
-namespace BasketballSeason.Repositories.PlayerRepo
+namespace BasketballSeason.Repositories.TournamentRepo
 {
-    public interface IPlayerRepository : IGenericRepository<Player>
+    public interface ITournamentRepository: IGenericRepository<Tournament>
     {
-        public Task<List<Player>> GetTeamPlayers(Guid TeamId);
     }
 }

@@ -9,5 +9,6 @@ namespace BasketballSeason.Repositories.TeamRepo
 {
     public interface ITeamRepository : IGenericRepository<Team>
     {
+        public Team GetTeam(Guid Id);
     }
 }

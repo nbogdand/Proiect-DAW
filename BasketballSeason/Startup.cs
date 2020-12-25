@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using BasketballSeason.Helpers;
+using BasketballSeason.Repositories.CoachRepo;
 using BasketballSeason.Repositories.PlayerRepo;
+using BasketballSeason.Repositories.TeamRepo;
+using BasketballSeason.Repositories.TournamentRepo;
 using BasketballSeason.Repositories.UserRepo;
 using BasketballSeason.Services;
 using BasketballSeason.Services.UserS;
@@ -17,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 
 namespace BasketballSeason
@@ -42,7 +46,10 @@ namespace BasketballSeason
                     });
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddDbContext<Data.MyAppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -52,6 +59,17 @@ namespace BasketballSeason
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPlayerService, PlayerService>();
+
+            services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+
+            services.AddScoped<ICoachService, CoachService>();
+            services.AddScoped<ICoachRepository, CoachRepository>();
+
+            services.AddScoped<ITournamentService, TournamentService>();
+            services.AddScoped<ITournamentRepository, TournamentRepository>();
+
+            services.AddScoped<ITeamInTournamnetRepository, TeamInTournamentRepository>();
 
             IdentityModelEventSource.ShowPII = true;
         }

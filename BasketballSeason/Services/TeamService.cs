@@ -30,9 +30,17 @@ namespace BasketballSeason.Services
             throw new NotImplementedException();
         }
 
-        public Team GetTeam(Guid Id)
+        public async Task<Team> GetTeam(Guid Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _teamRepository.GetTeam(Id);                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex.Message}\r\n{ex.StackTrace}");
+                return null;
+            }
         }
 
         public List<Team> GetTeams()

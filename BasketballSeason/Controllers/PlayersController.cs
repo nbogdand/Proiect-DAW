@@ -33,6 +33,18 @@ namespace BasketballSeason.Controllers
             return Ok(Result);
         }
 
+        [HttpGet("{TeamId:Guid}")]
+        public async Task<ActionResult<List<Player>>> GetTeamPlayers(Guid TeamId)
+        {
+            List<Player> Result = await _playerService.GetTeamPlayers(TeamId);
+
+            if (Result == null)
+            {
+                return Ok(new List<Player>());
+            }
+            return Ok(Result);
+        }
+
         [HttpGet("{PlayerId}")]
         public ActionResult<Player> GetPlayer(String Id)
         {

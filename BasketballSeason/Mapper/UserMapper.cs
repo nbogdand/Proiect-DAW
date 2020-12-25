@@ -10,18 +10,6 @@ namespace BasketballSeason.Mapper
 {
     public static class UserMapper
     {
-      /*  public static User ToUser(CreateUserRequestDTO request)
-        {
-            return new User
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Username = request.Username,
-                Email = request.Email,
-                Password = request.Password
-            };
-        }*/
-
         public static User ToUser(this LoginUserRequestDTO request)
         {
             return new User

@@ -9,6 +9,7 @@ namespace BasketballSeason.Services
     public interface IPlayerService
     {
         public Task<List<Player>> GetPlayers();
+        public Task<List<Player>> GetTeamPlayers(Guid Id);
         public Player GetPlayer(Guid Id);
         public Player CreatePlayer(Player Player);
         public Player UpdatePlayer(Guid Id, Player player);

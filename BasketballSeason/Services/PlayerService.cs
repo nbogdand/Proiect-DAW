@@ -91,6 +91,19 @@ namespace BasketballSeason.Services
             }
         }
 
+        public Task<List<Player>> GetTeamPlayers(Guid TeamId)
+        {
+            try
+            {
+                return _playerRepository.GetTeamPlayers(TeamId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message}\r\n{ex.StackTrace}");
+                return null;
+            }
+        }
+
         public Player UpdatePlayer(Guid Id, Player Player)
         {
             try

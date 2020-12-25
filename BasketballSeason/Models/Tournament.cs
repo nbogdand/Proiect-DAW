@@ -8,6 +8,6 @@ namespace BasketballSeason.Models
     {
         public string Name { get; set; }
 
-        public ICollection<TeamInTournament> TeamInTournament { get; set; }
+        public List<TeamInTournament> TeamInTournament { get; set; }
     }
 }

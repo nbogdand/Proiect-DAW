@@ -13,7 +13,7 @@ namespace BasketballSeason.Services
         private readonly ICoachRepository _coachRepository;
         private readonly ILogger _logger;
 
-        public CoachService(ICoachRepository coachRepository, ILogger logger)
+        public CoachService(ICoachRepository coachRepository, ILogger<CoachService> logger)
         {
             _coachRepository = coachRepository;
             _logger = logger;
