@@ -22,9 +22,9 @@ namespace BasketballSeason.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        public async Task<ActionResult<List<Player>>> GetTeamPlayers([FromQuery(Name = "teamId")] Guid TeamId)
         {
-            IEnumerable<Player> Result = await _playerService.GetPlayers();
+            List<Player> Result = (TeamId == null || TeamId == Guid.Empty) ? await _playerService.GetPlayers() : await _playerService.GetTeamPlayers(TeamId);
 
             if (Result == null)
             {
@@ -33,30 +33,41 @@ namespace BasketballSeason.Controllers
             return Ok(Result);
         }
 
-        [HttpGet("{TeamId:Guid}")]
-        public async Task<ActionResult<List<Player>>> GetTeamPlayers(Guid TeamId)
+        [HttpGet("{Id:Guid}")]
+        public ActionResult<Player> GetPlayer(Guid Id)
         {
-            List<Player> Result = await _playerService.GetTeamPlayers(TeamId);
+            if (Id == null) return BadRequest();
+
+            Player Result = _playerService.GetPlayer(Id);
 
             if (Result == null)
             {
-                return Ok(new List<Player>());
-            }
-            return Ok(Result);
-        }
-
-        [HttpGet("{PlayerId}")]
-        public ActionResult<Player> GetPlayer(String Id)
-        {
-            Player Result = _playerService.GetPlayer(Guid.Parse(Id));
-
-            if (Result == null)
-            {
-                return NotFound(Id);
+                return NotFound();
             }
 
             return Ok(Result);
         }
 
+        [HttpPut]
+        public ActionResult<Player> UpdateEmployee(Player player)
+        {
+            Player existingPlayer = _playerService.UpdatePlayer(player.Id, player);
+            if (existingPlayer == null)
+            {
+                return NotFound();
+            }
+            return Ok(player);
+        }
+
+        [HttpDelete("{PlayerId}")]
+        public ActionResult<bool> DeletePlayer(Guid PlayerId)
+        {
+            bool wasDeleted = _playerService.DeletePlayer(PlayerId);
+            if (wasDeleted)
+            {
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }

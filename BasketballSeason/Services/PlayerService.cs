@@ -119,6 +119,9 @@ namespace BasketballSeason.Services
                 ExistingPlayer.Name = Player.Name;
                 ExistingPlayer.Role = Player.Role;
 
+                _playerRepository.Update(ExistingPlayer);
+                _playerRepository.Save();
+
                 return ExistingPlayer;
             }
             catch (Exception ex)
