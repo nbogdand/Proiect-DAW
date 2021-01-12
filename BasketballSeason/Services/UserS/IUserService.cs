@@ -13,5 +13,6 @@ namespace BasketballSeason.Services.UserS
         IEnumerable<User> GetAllUsers();
         User GetById(Guid id);
         bool Register(CreateUserRequestDTO model);
+        bool SaveFcmToken(SaveFcmTokenDTO model, Guid userId);
     }
 }

@@ -102,5 +102,30 @@ namespace BasketballSeason.Services.UserS
                 return null;
             }
         }
+
+        public bool SaveFcmToken(SaveFcmTokenDTO fcmTokenDTO, Guid userId)
+        {
+            try
+            {
+                var existingUser = _userRepository.FindById(userId);
+
+                if (existingUser == null)
+                {
+                    return false;
+                }
+
+                existingUser.FcmToken = fcmTokenDTO.FcmToken;
+
+                _userRepository.Update(existingUser);
+                _userRepository.Save();
+
+                return true;
+            } catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex.Message}\r\n{ex.StackTrace}");
+                return false;
+            }
+        }
+
     }
 }

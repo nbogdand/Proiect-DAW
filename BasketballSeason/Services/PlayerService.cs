@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BasketballSeason.Mapper;
 using BasketballSeason.Models;
+using BasketballSeason.Models.DTOs.PlayerDTOs;
 using BasketballSeason.Repositories.PlayerRepo;
+using BasketballSeason.Repositories.TeamRepo;
+using BasketballSeason.Repositories.UserRepo;
+using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
 
 namespace BasketballSeason.Services
@@ -11,29 +17,41 @@ namespace BasketballSeason.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerRepository _playerRepository;
+        private readonly ITeamRepository _teamRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ILogger _logger;
 
-        public PlayerService(IPlayerRepository playerRepository, ILogger<PlayerService> logger)
+        public PlayerService(
+            IPlayerRepository playerRepository,
+            ITeamRepository teamRepository,
+            IUserRepository userRepository,
+            ILogger<PlayerService> logger
+        )
         {
             _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
+            _userRepository = userRepository;
             _logger = logger;
         }
 
-        public Player CreatePlayer(Player Player)
+        public Player CreatePlayer(CreatePlayerDTO PlayerDTO)
         {
             try
             {
-                var ExistingPlayer = _playerRepository.FindById(Player.Name);
+                var ExistingTeam = _teamRepository.FindById(new Guid(PlayerDTO.TeamId));
 
-                if (ExistingPlayer != null)
+                if (ExistingTeam == null)
                 {
                     return null;
                 }
 
-                _playerRepository.Create(Player);
+                Player newPlayer = PlayerDTO.toPlayer();
+                _playerRepository.Create(newPlayer);
                 _playerRepository.Save();
 
-                return Player;
+                NotifyAll(newPlayer);
+
+                return newPlayer;
             }
             catch (Exception ex)
             {
@@ -129,6 +147,45 @@ namespace BasketballSeason.Services
                 _logger.LogWarning($"{ex.Message}\r\n{ex.StackTrace}");
                 return null;
             }
+        }
+
+        private async void NotifyAll(Player newPlayer)
+        {
+            try
+            {
+                List<User> users = await _userRepository.GetAll();
+
+                if (users != null)
+                {
+                    foreach (User user in users)
+                    {
+                        if (user.FcmToken != null)
+                        {
+                            await SendNotification(newPlayer, user.FcmToken);
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+
+            }
+         
+        }
+
+        private async Task SendNotification(Player NewPlayer, string Token)
+        {
+            var message = new Message()
+            {
+                Notification = new Notification
+                {
+                    Title = "New Player",
+                    Body = $"{NewPlayer.Name} has entered the season!"
+                },
+
+                Token = Token
+            };
+            await FirebaseMessaging.DefaultInstance.SendAsync(message);
         }
     }
 }

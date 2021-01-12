@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BasketballSeason.Helpers;
 using BasketballSeason.Models;
+using BasketballSeason.Models.DTOs.PlayerDTOs;
 using BasketballSeason.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,24 @@ namespace BasketballSeason.Controllers
             if (Result == null)
             {
                 return NotFound();
+            }
+
+            return Ok(Result);
+        }
+
+        [HttpPost]
+        public ActionResult<Player> AddPlayer([FromBody] CreatePlayerDTO createPlayerDTO)
+        {
+            if (createPlayerDTO.TeamId == null)
+            {
+                return BadRequest("Missing team id");
+            }
+
+            Player Result = _playerService.CreatePlayer(createPlayerDTO);
+
+            if (Result == null)
+            {
+                return BadRequest("An error has occurred.");
             }
 
             return Ok(Result);
